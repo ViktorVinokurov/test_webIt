@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'id',
   data: () => ({
@@ -41,14 +42,9 @@ export default {
     this.getInfoNews()
   },
   computed: {
-    infoComputed: {
-      get () {
-        return this.info
-      },
-      set (v) {
-        this.info = v
-      }
-    },
+    ...mapGetters({
+      infoComputed: 'news/getInfoNews'
+    }),
     photos () {
       return this.infoComputed.photos
     },
@@ -60,12 +56,9 @@ export default {
     }
   },
   methods: {
-    async getInfoNews () {
-      const response = await axios.get(`https://shop.anyprinter.ru/api/news/${this.$route.params.id}`)
-      if (response.status) {
-        this.infoComputed = response.data
-      }
-    },
+    ...mapActions({
+      getInfoNews: 'news/GET_INFO_NEWS'
+    }),
     srcImg (path) {
       return `https://shop.anyprinter.ru/${path}`
     }

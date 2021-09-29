@@ -10,8 +10,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import TNews from '@/components/news'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'news',
   data: () => ({
@@ -21,25 +22,17 @@ export default {
     TNews
   },
   computed: {
-    newsComputed: {
-      get () {
-        return this.news
-      },
-      set (v) {
-        this.news = v
-      }
-    }
+    ...mapGetters({
+      newsComputed: 'news/getNews'
+    })
   },
   mounted () {
     this.getNews()
   },
   methods: {
-    async getNews () {
-      const response = await axios.get('https://shop.anyprinter.ru/api/news')
-      if (response.status) {
-        this.newsComputed = response.data
-      }
-    }
+    ...mapActions({
+      getNews: 'news/GET_NEWS'
+    })
   }
 }
 </script>

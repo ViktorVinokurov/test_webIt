@@ -26,30 +26,26 @@
 <script>
 import axios from 'axios'
 import TNews from '@/components/news'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'Home',
   components: {
     TNews
   },
   data: () => ({
-    images: [],
-    news: []
+    images: []
   }),
   computed: {
+    ...mapGetters({
+      newsComputed: 'news/getNews'
+    }),
     imagesComputed: {
       get () {
         return this.images
       },
       set (v) {
         this.images = v
-      }
-    },
-    newsComputed: {
-      get () {
-        return this.news
-      },
-      set (v) {
-        this.news = v
       }
     }
   },
@@ -58,16 +54,13 @@ export default {
     this.getNews()
   },
   methods: {
+    ...mapActions({
+      getNews: 'news/GET_NEWS_LIMIT'
+    }),
     async getImg () {
       const response = await axios.get('https://shop.anyprinter.ru/api/slider')
       if (response.status) {
         this.imagesComputed = response.data
-      }
-    },
-    async getNews () {
-      const response = await axios.get('https://shop.anyprinter.ru/api/news?limit=5')
-      if (response.status) {
-        this.newsComputed = response.data
       }
     },
     imgSrc (path) {
